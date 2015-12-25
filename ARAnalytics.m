@@ -186,6 +186,9 @@ static BOOL _ARLogShouldPrintStdout = YES;
     }
     
     // Add future integrations here:
+    if (analyticsDictionary[ARUhouzzAnalyticsID]) {
+        [self setupUhouzzAnalyticsWithApiKey:analyticsDictionary[ARUhouzzAnalyticsID]];
+    }
 
 
 
@@ -551,6 +554,14 @@ static BOOL _ARLogShouldPrintStdout = YES;
 #endif
 }
 
++ (void)setupUhouzzAnalyticsWithApiKey:(NSString *)token
+{
+#ifdef AR_UHOUZZANALYTICS_EXISTS
+    UhouzzAnalyticsProvider *provider = [[UhouzzAnalyticsProvider alloc] initWithIdentifier:token];
+    [self setupProvider:provider];
+#endif
+}
+
 #pragma mark -
 #pragma mark User Setup
 
@@ -829,3 +840,4 @@ NSString * const ARMobileAppTrackerAdvertiserID = @"ARMobileAppTrackerAdvertiser
 NSString * const ARMobileAppTrackerConversionKey = @"ARMobileAppTrackerConversionKey";
 NSString * const ARMobileAppTrackerAllowedEvents = @"ARMobileAppTrackerAllowedEvents";
 NSString * const ARLaunchKitAPIToken = @"ARLaunchKitAPIToken";
+NSString * const ARUhouzzAnalyticsID = @"ARUhouzzAnalyticsID";

@@ -225,3 +225,4 @@ extern NSString * const ARMobileAppTrackerAdvertiserID;
 extern NSString * const ARMobileAppTrackerConversionKey;
 extern NSString * const ARMobileAppTrackerAllowedEvents;
 extern NSString * const ARLaunchKitAPIToken;
+extern NSString * const ARUhouzzAnalyticsID;
