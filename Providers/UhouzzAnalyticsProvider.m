@@ -21,28 +21,29 @@
 }
 
 - (void) identifyUserWithID:(NSString *)userID andEmailAddress:(NSString *)email {
-    [self identifyUserWithID:userID anonymousID:nil andEmailAddress:email];
+//    [self identifyUserWithID:userID anonymousID:nil andEmailAddress:email];
+    [ARAnalytics addEventSuperProperties:@{ @"user_id": userID, @"email_id": email }];
 }
 
-- (void) identifyUserWithID:(NSString *)userID
-                anonymousID:(NSString *)anonymousID
-            andEmailAddress:(NSString *)email {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-    if (userID && userID.length) {
-        [dict setObject:userID forKey:@"user_id"];
-    }
-
-    if (anonymousID && anonymousID.length) {
-        [dict setObject:anonymousID forKey:@"anonymous_id"];
-    }
-
-    if (email && email.length) {
-        [dict setObject:email forKey:@"email"];
-    }
-
-    [ARAnalytics addEventSuperProperties:dict];
-}
+// - (void) identifyUserWithID:(NSString *)userID
+//                anonymousID:(NSString *)anonymousID
+//            andEmailAddress:(NSString *)email {
+//    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//
+//    if (userID && userID.length) {
+//        [dict setObject:userID forKey:@"user_id"];
+//    }
+//
+//    if (anonymousID && anonymousID.length) {
+//        [dict setObject:anonymousID forKey:@"anonymous_id"];
+//    }
+//
+//    if (email && email.length) {
+//        [dict setObject:email forKey:@"email"];
+//    }
+//
+//    [ARAnalytics addEventSuperProperties:dict];
+// }
 
 - (void) setUserProperty:(NSString *)property toValue:(NSString *)value {
     NSAssert(property != nil, @"property can not be nil");
