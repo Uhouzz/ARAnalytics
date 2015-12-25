@@ -83,6 +83,10 @@
 #import "UMengAnalyticsProvider.h"
 #endif
 
+#ifdef AR_UHOUZZANALYTICS_EXISTS
+#import "UhouzzAnalyticsProvider.h"
+#endif
+
 #ifdef AR_LIBRATO_EXISTS
 #import "LibratoProvider.h"
 #endif
