@@ -21,7 +21,27 @@
 }
 
 - (void) identifyUserWithID:(NSString *)userID andEmailAddress:(NSString *)email {
-    [ARAnalytics addEventSuperProperties:@{ @"user_id":userID, @"email":email }];
+    [self identifyUserWithID:userID anonymousID:nil andEmailAddress:email];
+}
+
+- (void) identifyUserWithID:(NSString *)userID
+                anonymousID:(NSString *)anonymousID
+            andEmailAddress:(NSString *)email {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+
+    if (userID && userID.length) {
+        [dict setObject:userID forKey:@"user_id"];
+    }
+
+    if (anonymousID && anonymousID.length) {
+        [dict setObject:anonymousID forKey:@"anonymous_id"];
+    }
+
+    if (email && email.length) {
+        [dict setObject:email forKey:@"email"];
+    }
+
+    [ARAnalytics addEventSuperProperties:dict];
 }
 
 - (void) setUserProperty:(NSString *)property toValue:(NSString *)value {
