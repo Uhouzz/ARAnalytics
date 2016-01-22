@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         =  'ARAnalytics'
-  s.version      =  '3.8.5'
+  s.version      =  '3.8.6'
   s.license      =  {:type => 'MIT', :file => 'LICENSE' }
   s.homepage     =  'https://github.com/orta/ARAnalytics'
   s.authors      =  { 'orta' => 'orta.therox@gmail.com', 'Daniel Haight' => "confidence.designed@gmail.com" }
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   heap             = { :spec_name => "HeapAnalytics",       :dependency => "Heap" }
   chartbeat        = { :spec_name => "Chartbeat",           :dependency => "Chartbeat", :has_extension => true }
   umeng            = { :spec_name => "UMengAnalytics",      :dependency => "UMengAnalytics" }
-  segmentio        = { :spec_name => "Segmentio",           :dependency => [["Analytics", ">= 3"]], :tvos => true}
+  segmentio        = { :spec_name => "Segmentio",           :dependency => ["Analytics"], :tvos => true}
   swrve            = { :spec_name => "Swrve",               :dependency => "SwrveSDK" }
   yandex           = { :spec_name => "YandexMobileMetrica", :dependency => "YandexMobileMetrica" }
   adjust           = { :spec_name => "Adjust",              :dependency => "Adjust" }
