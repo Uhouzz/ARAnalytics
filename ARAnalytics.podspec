@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         =  'ARAnalytics'
-  s.version      =  '3.8.6'
+  s.version      =  '3.8.7'
   s.license      =  {:type => 'MIT', :file => 'LICENSE' }
   s.homepage     =  'https://github.com/orta/ARAnalytics'
   s.authors      =  { 'orta' => 'orta.therox@gmail.com', 'Daniel Haight' => "confidence.designed@gmail.com" }
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   heap             = { :spec_name => "HeapAnalytics",       :dependency => "Heap" }
   chartbeat        = { :spec_name => "Chartbeat",           :dependency => "Chartbeat", :has_extension => true }
   umeng            = { :spec_name => "UMengAnalytics",      :dependency => "UMengAnalytics" }
-  segmentio        = { :spec_name => "Segmentio",           :dependency => ["Analytics"], :tvos => true}
+  segmentio        = { :spec_name => "Segmentio",           :dependency => [["Analytics", ">= 3"]], :tvos => true}
   swrve            = { :spec_name => "Swrve",               :dependency => "SwrveSDK" }
   yandex           = { :spec_name => "YandexMobileMetrica", :dependency => "YandexMobileMetrica" }
   adjust           = { :spec_name => "Adjust",              :dependency => "Adjust" }
@@ -56,7 +56,7 @@ Pod::Spec.new do |s|
   parseAnalytics_mac = { :spec_name => "ParseAnalyticsOSX", :dependency => "Parse",             :osx => true,  :provider => "ParseAnalytics", :has_extension => true }
 
 
-  all_analytics = [mixpanel, localytics, flurry, google, kissmetrics, crittercism, crashlytics, fabric, bugsnag, countly, helpshift, kissmetrics_mac, mixpanel_mac, tapstream, newRelic, amplitude, hockeyApp, hockeyAppLib, hockeyApp_mac, parseAnalytics, parseAnalytics_mac, heap, chartbeat, umeng, librato, segmentio, swrve, yandex, adjust, appsflyer, branch, snowplow, sentry, intercom, keen, adobe, installtracker, appsee, mobileapptracker, launchkit, uhouzzAnalytics]
+  all_analytics = [mixpanel, localytics, flurry, google, kissmetrics, crittercism, crashlytics, fabric, bugsnag, countly, helpshift, kissmetrics_mac, mixpanel_mac, tapstream, newRelic, amplitude, hockeyApp, hockeyAppLib, hockeyApp_mac, parseAnalytics, parseAnalytics_mac, heap, chartbeat, umeng, librato, swrve, yandex, adjust, appsflyer, branch, snowplow, sentry, intercom, keen, adobe, installtracker, appsee, mobileapptracker, launchkit, uhouzzAnalytics]
 
   # To make the pod spec API cleaner, subspecs are "iOS/KISSmetrics"
 
