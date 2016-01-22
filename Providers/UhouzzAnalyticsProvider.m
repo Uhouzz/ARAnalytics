@@ -58,11 +58,19 @@
 }
 
 - (void) didShowNewPageView:(NSString *)pageTitle {
-    [UhouzzAnalytics logPageView:pageTitle seconds:35];
+//    [UhouzzAnalytics logPageView:pageTitle seconds:0.1];
+    [self didShowNewPageView:pageTitle withProperties:nil];
 }
 
 - (void) didShowNewPageView:(NSString *)pageTitle withProperties:(NSDictionary *)properties {
-    [UhouzzAnalytics logTimingEvent:pageTitle withInterval:@33 properties:properties];
+    int duration = 0.1;
+
+    if (properties.count && [properties objectForKey:@"length"]) {
+        duration = (int)[properties objectForKey:@"length"];
+    }
+
+    [UhouzzAnalytics logPageView:pageTitle seconds:duration];
+//    [UhouzzAnalytics logTimingEvent:pageTitle withInterval:@(duration) properties:properties];
 }
 
 - (void) event:(NSString *)event withProperties:(NSDictionary *)properties {
