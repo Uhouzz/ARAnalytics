@@ -66,7 +66,7 @@
     int duration = 0.1;
 
     if (properties.count && [properties objectForKey:@"length"]) {
-        duration = (int)[properties objectForKey:@"length"];
+        duration = [NSString stringWithFormat:@"%.2f", [properties objectForKey:@"length"]];
     }
 
     [UhouzzAnalytics logPageView:pageTitle seconds:duration];
