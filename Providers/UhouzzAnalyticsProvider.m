@@ -63,14 +63,13 @@
 }
 
 - (void) didShowNewPageView:(NSString *)pageTitle withProperties:(NSDictionary *)properties {
-    int duration = 0.1;
+    NSTimeInterval duration = 0.1;
 
     if (properties.count && [properties objectForKey:@"length"]) {
-        duration = [NSString stringWithFormat:@"%.2f", [properties objectForKey:@"length"]];
+        duration = [[properties objectForKey:@"length"] doubleValue];
     }
 
     [UhouzzAnalytics logPageView:pageTitle seconds:duration];
-//    [UhouzzAnalytics logTimingEvent:pageTitle withInterval:@(duration) properties:properties];
 }
 
 - (void) event:(NSString *)event withProperties:(NSDictionary *)properties {

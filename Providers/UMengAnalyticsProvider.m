@@ -25,10 +25,10 @@
 }
 
 - (void) didShowNewPageView:(NSString *)pageTitle withProperties:(NSDictionary *)properties {
-    int duration = 0.1;
+    NSTimeInterval duration = 0.1;
 
     if (properties.count && [properties objectForKey:@"length"]) {
-        duration = [NSString stringWithFormat:@"%.2f", [properties objectForKey:@"length"]];
+        duration = [[properties objectForKey:@"length"] doubleValue];
     }
 
     [MobClick logPageView:pageTitle seconds:duration];
@@ -36,6 +36,7 @@
 
 /// Submit an event with a time interval
 - (void) logTimingEvent:(NSString *)event withInterval:(NSNumber *)interval {
+    //durations位为毫秒
     [MobClick event:event durations:(int)([interval doubleValue] * 1000)];
 }
 
