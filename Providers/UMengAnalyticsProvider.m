@@ -8,7 +8,8 @@
 - (id) initWithIdentifier:(NSString *)identifier {
     NSAssert([MobClick class], @"MobClick is not included");
     [MobClick startWithAppkey:identifier];
-
+    [MobClick setAppVersion:XcodeAppVersion];
+    
     return [super init];
 }
 
