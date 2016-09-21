@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name         =  'ARAnalytics'
   s.version      =  '3.9.0'
+  s.version      =  '4.0.0'
   s.license      =  {:type => 'MIT', :file => 'LICENSE' }
   s.homepage     =  'https://github.com/orta/ARAnalytics'
   s.authors      =  { 'orta' => 'orta.therox@gmail.com', 'Daniel Haight' => "confidence.designed@gmail.com" }
@@ -12,9 +13,9 @@ Pod::Spec.new do |s|
   # s.description is at the bottom as it is partially generated.
 
   mixpanel         = { :spec_name => "Mixpanel",            :dependency => "Mixpanel" }
-  localytics       = { :spec_name => "Localytics",          :dependency => "Localytics" }
+  localytics       = { :spec_name => "Localytics",          :dependency => "Localytics",            :ios_deployment_target => "8.0" }
   flurry           = { :spec_name => "Flurry",              :dependency => "Flurry-iOS-SDK" }
-  google           = { :spec_name => "GoogleAnalytics",     :dependency => "Google/Analytics", :has_extension => true }
+  google           = { :spec_name => "GoogleAnalytics",     :dependency => "GoogleAnalytics",       :has_extension => true }
   kissmetrics      = { :spec_name => "KISSmetrics",         :dependency => "KISSmetrics" }
   crittercism      = { :spec_name => "Crittercism",         :dependency => "CrittercismSDK" }
   countly          = { :spec_name => "Countly",             :dependency => "Countly" }
@@ -25,15 +26,15 @@ Pod::Spec.new do |s|
   amplitude        = { :spec_name => "Amplitude",           :dependency => "Amplitude-iOS" }
   hockeyApp        = { :spec_name => "HockeyApp",           :dependency => "HockeySDK-Source" }
   hockeyAppLib     = { :spec_name => "HockeyAppLib",        :dependency => "HockeySDK" }
-  parseAnalytics   = { :spec_name => "ParseAnalytics",      :dependency => "Parse", :has_extension => true }
+  parseAnalytics   = { :spec_name => "ParseAnalytics",      :dependency => "Parse",                 :has_extension => true }
   heap             = { :spec_name => "HeapAnalytics",       :dependency => "Heap" }
-  chartbeat        = { :spec_name => "Chartbeat",           :dependency => "Chartbeat", :has_extension => true }
+  chartbeat        = { :spec_name => "Chartbeat",           :dependency => "Chartbeat",             :has_extension => true }
   umeng            = { :spec_name => "UMengAnalytics",      :dependency => "UMengAnalytics" }
   segmentio        = { :spec_name => "Segmentio",           :dependency => [["Analytics", ">= 3"]], :tvos => true}
   swrve            = { :spec_name => "Swrve",               :dependency => "SwrveSDK" }
   yandex           = { :spec_name => "YandexMobileMetrica", :dependency => "YandexMobileMetrica" }
   adjust           = { :spec_name => "Adjust",              :dependency => "Adjust" }
-  intercom         = { :spec_name => "Intercom",            :dependency => "Intercom" }
+  intercom         = { :spec_name => "Intercom",            :dependency => "Intercom",              :ios_deployment_target => "8.0" }
   librato          = { :spec_name => "Librato" }
   crashlytics      = { :spec_name => "Crashlytics",         :dependency => "Crashlytics" }
   fabric           = { :spec_name => "Fabric",              :dependency => ["Fabric", "Crashlytics"] }
@@ -48,6 +49,10 @@ Pod::Spec.new do |s|
   mobileapptracker = { :spec_name => "MobileAppTracker",    :dependency => "MobileAppTracker"}
   launchkit        = { :spec_name => "LaunchKit",           :dependency => "LaunchKit" }
   uhouzzAnalytics  = { :spec_name => "UhouzzAnalytics",     :dependency => "UhouzzAnalytics" }
+  firebase         = { :spec_name => "Firebase",            :dependency => "Firebase/Core" }
+  leanplum         = { :spec_name => "Leanplum",            :dependency => "Leanplum-iOS-SDK"}
+  appboy           = { :spec_name => "Appboy",              :dependency => "Appboy-iOS-SDK"}
+
 
   kissmetrics_mac = { :spec_name => "KISSmetricsOSX",  :dependency => "KISSmetrics",            :osx => true,  :provider => "KISSmetrics" }
 # countly_mac     = { :spec_name => "CountlyOSX",      :dependency => "Countly",                :osx => true,  :provider => "Countly" }
@@ -56,7 +61,8 @@ Pod::Spec.new do |s|
   parseAnalytics_mac = { :spec_name => "ParseAnalyticsOSX", :dependency => "Parse",             :osx => true,  :provider => "ParseAnalytics", :has_extension => true }
 
 
-  all_analytics = [mixpanel, localytics, flurry, google, kissmetrics, crittercism, crashlytics, fabric, bugsnag, countly, helpshift, kissmetrics_mac, mixpanel_mac, tapstream, newRelic, amplitude, hockeyApp, hockeyAppLib, hockeyApp_mac, parseAnalytics, parseAnalytics_mac, heap, chartbeat, umeng, librato, swrve, yandex, adjust, appsflyer, branch, snowplow, sentry, intercom, keen, adobe, installtracker, appsee, mobileapptracker, launchkit, uhouzzAnalytics]
+
+  all_analytics = [mixpanel, localytics, flurry, google, kissmetrics, crittercism, crashlytics, fabric, bugsnag, countly, helpshift, kissmetrics_mac, mixpanel_mac, tapstream, newRelic, amplitude, hockeyApp, hockeyAppLib, hockeyApp_mac, parseAnalytics, parseAnalytics_mac, heap, chartbeat, umeng, librato, segmentio, swrve, yandex, adjust, appsflyer, branch, snowplow, sentry, intercom, keen, adobe, installtracker, appsee, mobileapptracker, launchkit, firebase, leanplum, appboy,uhouzzAnalytics]
 
   # To make the pod spec API cleaner, subspecs are "iOS/KISSmetrics"
 
@@ -70,7 +76,8 @@ Pod::Spec.new do |s|
     ss.source_files = ['*.{h,m}', 'Providers/ARAnalyticalProvider.{h,m}', 'Providers/ARAnalyticsProviders.h']
     ss.exclude_files = ['ARDSL.{h,m}']
     ss.private_header_files = 'ARNavigationControllerDelegateProxy.h'
-    ss.platform = :ios
+    ss.tvos.deployment_target = '9.0'
+	  ss.ios.deployment_target = '7.0'
   end
 
   s.subspec "DSL" do |ss|
@@ -86,6 +93,10 @@ Pod::Spec.new do |s|
   # make specs for each analytics
   all_analytics.each do |analytics_spec|
     s.subspec analytics_spec[:spec_name] do |ss|
+
+      if analytics_spec[:ios_deployment_target]
+        ss.ios.deployment_target = analytics_spec[:ios_deployment_target]
+      end
 
       providername = analytics_spec[:provider]? analytics_spec[:provider] : analytics_spec[:spec_name]
 

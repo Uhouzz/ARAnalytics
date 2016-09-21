@@ -10,11 +10,11 @@ static NSString * const kMixpanelTimingPropertyKey = @"$duration";
 
 @implementation MixpanelProvider
 
-- (id)initWithIdentifier:(NSString *)identifier {
+- (instancetype)initWithIdentifier:(NSString *)identifier {
     return [self initWithIdentifier:identifier andHost:nil];
 }
 
-- (id)initWithIdentifier:(NSString *)identifier andHost:(NSString *)host {
+- (instancetype)initWithIdentifier:(NSString *)identifier andHost:(NSString *)host {
 #ifdef AR_MIXPANEL_EXISTS
 
     NSAssert([Mixpanel class], @"Mixpanel is not included");
@@ -25,7 +25,7 @@ static NSString * const kMixpanelTimingPropertyKey = @"$duration";
     });
 
     if(! _mixpanel) {
-        _mixpanel = [[Mixpanel alloc] initWithToken:identifier launchOptions:nil andFlushInterval:60];
+        _mixpanel = [[Mixpanel alloc] initWithToken:identifier andFlushInterval:60];
     }
 
     if (host) {
@@ -83,6 +83,11 @@ static NSString * const kMixpanelTimingPropertyKey = @"$duration";
 - (void)registerSuperProperties:(NSDictionary *)properties
 {
     [self.mixpanel registerSuperProperties:properties];
+}
+
+- (void)addPushDeviceToken:(NSData *)deviceToken
+{
+    [[self.mixpanel people] addPushDeviceToken:deviceToken];
 }
 
 - (NSDictionary *)currentSuperProperties

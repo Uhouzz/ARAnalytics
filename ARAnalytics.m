@@ -76,7 +76,8 @@ static BOOL _ARLogShouldPrintStdout = YES;
         [self setupMixpanelWithToken:analyticsDictionary[ARMixpanelToken] andHost:analyticsDictionary[ARMixpanelHost]];
     }
 
-    if (analyticsDictionary[ARCountlyAppKey] && analyticsDictionary[ARCountlyHost]) {
+    if (analyticsDictionary[ARCountlyAppKey]) {
+        // ARCountlyHost is nil if you want the cloud host.
         [self setupCountlyWithAppKey:analyticsDictionary[ARCountlyAppKey] andHost:analyticsDictionary[ARCountlyHost]];
     }
 
@@ -161,7 +162,7 @@ static BOOL _ARLogShouldPrintStdout = YES;
     }
 
     if (analyticsDictionary[ARAdobeData]) {
-        [self setupAdobeWithData:analyticsDictionary[ARAdobeData]];
+        [self setupAdobeWithData:analyticsDictionary[ARAdobeData] otherSettings:analyticsDictionary[ARAdobeSettings]];
     }
     
     if (analyticsDictionary[ARInstallTrackerApplicationID]) {
@@ -295,6 +296,14 @@ static BOOL _ARLogShouldPrintStdout = YES;
 {
 #ifdef AR_GOOGLEANALYTICS_EXISTS
     GoogleAnalyticsProvider *provider = [[GoogleAnalyticsProvider alloc] initWithIdentifier:identifier];
+    [self setupProvider:provider];
+#endif
+}
+
++ (void)setupFirebaseAnalytics
+{
+#ifdef AR_FIREBASE_EXISTS
+    FirebaseProvider *provider = [[FirebaseProvider alloc] initWithIdentifier:nil];
     [self setupProvider:provider];
 #endif
 }
@@ -513,10 +522,9 @@ static BOOL _ARLogShouldPrintStdout = YES;
 #endif
 }
 
-+ (void)setupAdobeWithData:(NSDictionary *)additionalData
-{
++ (void)setupAdobeWithData:(NSDictionary *)additionalData otherSettings:(NSDictionary *)settings {
 #ifdef AR_ADOBE_EXISTS
-    AdobeProvider *provider = [[AdobeProvider alloc] initWithData:additionalData];
+    AdobeProvider *provider = [[AdobeProvider alloc] initWithData:additionalData settings:settings];
     [self setupProvider:provider];
 #endif
 }
@@ -546,8 +554,7 @@ static BOOL _ARLogShouldPrintStdout = YES;
 #endif
 }
 
-+ (void)setupLaunchKitWithAPIToken:(NSString *)token
-{
++ (void)setupLaunchKitWithAPIToken:(NSString *)token {
 #ifdef AR_LAUNCHKIT_EXISTS
     LaunchKitProvider *provider = [[LaunchKitProvider alloc] initWithIdentifier:token];
     [self setupProvider:provider];
@@ -558,6 +565,20 @@ static BOOL _ARLogShouldPrintStdout = YES;
 {
 #ifdef AR_UHOUZZANALYTICS_EXISTS
     UhouzzAnalyticsProvider *provider = [[UhouzzAnalyticsProvider alloc] initWithIdentifier:token];
+    [self setupProvider:provider];
+#endif
+}
+
++ (void)setupLeanplumWithAppId:(NSString *)appId developmentKey:(NSString *)developmentKey productionKey:(NSString *)productionKey {
+#ifdef AR_LEANPLUM_EXISTS
+    LeanplumProvider *provider = [[LeanplumProvider alloc] initWithAppId:appId developmentKey:developmentKey productionKey:productionKey];
+    [self setupProvider:provider];
+#endif
+}
+
++ (void)setupAppboy {
+#ifdef AR_APPBOY_EXISTS
+    AppboyProvider *provider = [[AppboyProvider alloc] initWithIdentifier:nil];
     [self setupProvider:provider];
 #endif
 }
@@ -749,18 +770,20 @@ static BOOL _ARLogShouldPrintStdout = YES;
 @end
 
 void ARLog (NSString *format, ...) {
+    va_list argList;
+    va_start(argList, format);
+    ARLogv(format, argList);
+    va_end(argList);
+}
+
+void ARLogv (NSString *format, va_list argList) {
     if (format == nil) {
         if (_ARLogShouldPrintStdout) {
             printf("nil \n");
         }
         return;
     }
-    // Get a reference to the arguments that follow the format parameter
-    va_list argList;
-    va_start(argList, format);
-
-    // Perform format string argument substitution, reinstate %% escapes, then print
-
+    
     @autoreleasepool {
         NSString *parsedFormatString = [[NSString alloc] initWithFormat:format arguments:argList];
         parsedFormatString = [parsedFormatString stringByReplacingOccurrencesOfString:@"%%" withString:@"%%%%"];
@@ -772,8 +795,6 @@ void ARLog (NSString *format, ...) {
             [provider remoteLog:parsedFormatString];
         }];
     }
-
-    va_end(argList);
 }
 
 void ARAnalyticsEvent (NSString *event, NSDictionary *properties) {
@@ -834,6 +855,7 @@ NSString * const ARKeenProjectID = @"ARKeenProjectID";
 NSString * const ARKeenWriteKey = @"ARKeenWriteKey";
 NSString * const ARKeenReadKey = @"ARKeenReadKey";
 NSString * const ARAdobeData = @"ARAdobeData";
+NSString * const ARAdobeSettings = @"ARAdobeSettings";
 NSString * const ARInstallTrackerApplicationID = @"ARInstallTrackerApplicationID";
 NSString * const ARAppseeAPIKey = @"ARAppseeAPIKey";
 NSString * const ARMobileAppTrackerAdvertiserID = @"ARMobileAppTrackerAdvertiserID";

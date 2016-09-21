@@ -2,11 +2,18 @@
 #import <objc/message.h>
 
 #ifdef AR_HOCKEYAPP_EXISTS
-#import <HockeySDK-Source/HockeySDK.h>
-#import <HockeySDK-Source/BITCrashDetails.h>
-#import <HockeySDK-Source/BITUpdateManagerDelegate.h>
-#import <HockeySDK-Source/BITCrashManager.h>
-#import <HockeySDK-Source/BITCrashManagerDelegate.h>
+#if __has_include(<HockeySDK-Source/HockeySDK.h>)
+  #import <HockeySDK-Source/HockeySDK.h>
+  #import <HockeySDK-Source/BITCrashDetails.h>
+  #import <HockeySDK-Source/BITUpdateManagerDelegate.h>
+  #import <HockeySDK-Source/BITCrashManager.h>
+  #import <HockeySDK-Source/BITCrashManagerDelegate.h>
+#endif
+
+#if __has_include(<HockeySDK_Source/HockeySDK.h>)
+  #import <HockeySDK_Source/HockeySDK.h>
+#endif
+
 #endif
 
 #define MAX_HOCKEY_LOG_MESSAGES 100
@@ -36,19 +43,19 @@ IsHockeySDKCompatibleForLogging(void)
 
 @implementation HockeyAppProvider
 
--(id)initWithIdentifier:(NSString *)identifier {
+-(instancetype)initWithIdentifier:(NSString *)identifier {
     return [self initWithBetaIdentifier:identifier liveIdentifier:nil];
 }
 
--(id)initWithBetaIdentifier:(NSString *)betaIdentifier liveIdentifier:(NSString *)liveIdentfier {
+-(instancetype)initWithBetaIdentifier:(NSString *)betaIdentifier liveIdentifier:(NSString *)liveIdentfier {
     self = [super init];
     if (!self) return nil;
-    
+
     _betaIdentifier = betaIdentifier;
     _liveIdentifier = liveIdentfier;
-    
+
     [self performSelector:@selector(startManager) withObject:nil afterDelay:0.5];
-    
+
     return self;
 }
 
@@ -59,7 +66,7 @@ IsHockeySDKCompatibleForLogging(void)
     else {
         [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:_betaIdentifier delegate:self];
     }
-    
+
     [[BITHockeyManager sharedHockeyManager] startManager];
 #if HOCKEYSDK_FEATURE_AUTHENTICATOR
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
@@ -94,7 +101,7 @@ IsHockeySDKCompatibleForLogging(void)
         return [[UIDevice currentDevice] performSelector:@selector(uniqueIdentifier)];
     }
 #pragma clang diagnostic pop
-    
+
 #endif
     return nil;
 }

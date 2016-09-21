@@ -92,17 +92,14 @@ describe(@"events", ^{
 
     beforeEach(^{
         event = [[NSUUID UUID] UUIDString];
-        analyticsMock = [OCMockObject mockForClass:ARAnalytics.class];
+        analyticsMock = OCMClassMock([ARAnalytics class]);
     });
 
     afterEach(^{
-        [analyticsMock verify];
         [analyticsMock stopMocking];
     });
 
     it(@"calls the event method on ARAnalytics after the method", ^{
-        [[analyticsMock expect] event:event withProperties:OCMOCK_ANY];
-        
         [ARAnalytics addEventAnalyticsHook: @{
             ARAnalyticsClass: TestObject.class,
             ARAnalyticsDetails: @[@{
@@ -110,16 +107,54 @@ describe(@"events", ^{
                 ARAnalyticsSelectorName: ARAnalyticsSelector(methodToBeExecuted),
             }]
         }];
+
+        [[[TestObject alloc] init] methodToBeExecuted];
+
+        OCMVerify([analyticsMock event:event withProperties:[OCMArg any]]);
+    });
+
+    it(@"calls the event method on ARAnalytics after the method when the event name is supplied via a block", ^{
+        [ARAnalytics addEventAnalyticsHook:@{
+                ARAnalyticsClass : TestObject.class,
+                ARAnalyticsDetails : @[@{
+                        ARAnalyticsEventNameBlock : ^NSString *(TestObject *controller,
+                                NSArray *parameters, NSDictionary *customProperties) {
+                            return event;
+                        },
+                        ARAnalyticsSelectorName : ARAnalyticsSelector(methodToBeExecuted),
+                }]
+        }];
+
+        [[[TestObject alloc] init] methodToBeExecuted];
+
+        OCMVerify([analyticsMock event:event withProperties:[OCMArg any]]);
+    });
+    
+    it(@"only calls the block to extract properties once", ^{
+        __block NSInteger timesCalled = 0;
+        [ARAnalytics addEventAnalyticsHook:@{
+                ARAnalyticsClass : TestObject.class,
+                ARAnalyticsDetails : @[@{
+                       ARAnalyticsProperties: ^NSDictionary*(TestObject *controller, NSArray *parameters) {
+                            timesCalled++;
+                            return @{};
+                       },
+                       ARAnalyticsEventNameBlock : ^NSString *(TestObject *controller,
+                                                      NSArray *parameters, NSDictionary *customProperties) {
+                            return event;
+                       },
+                       ARAnalyticsSelectorName : ARAnalyticsSelector(methodToBeExecuted),
+                }]
+        }];
         
         [[[TestObject alloc] init] methodToBeExecuted];
+        
+        OCMVerify([analyticsMock event:event withProperties:[OCMArg any]]);
+        expect(timesCalled).to.equal(1);
     });
 
     it(@"respects the properties given by ARAnalyticsEventProperties", ^{
         NSString *propertyKey = @"airplanes";
-
-        [[analyticsMock expect] event:event withProperties:[OCMArg checkWithBlock:^BOOL(NSDictionary *properties) {
-            return properties[propertyKey] != nil;
-        }]];
 
         [ARAnalytics addEventAnalyticsHook: @{
             ARAnalyticsClass: TestObject.class,
@@ -133,6 +168,10 @@ describe(@"events", ^{
         }];
 
         [[[TestObject alloc] init] methodToBeExecutedWithProperties];
+
+        OCMVerify([analyticsMock event:event withProperties:[OCMArg checkWithBlock:^BOOL(NSDictionary *properties) {
+            return properties[propertyKey] != nil;
+        }]]);
     });
 
     describe(@"should fire", ^{
@@ -162,10 +201,11 @@ describe(@"events", ^{
             }];
             
             [[[TestObject alloc] init] methodToBeSkipped];
+
+            OCMVerifyAll(analyticsMock);
         });
 
         it(@"fires event when shouldFire = YES", ^{
-            [[analyticsMock expect] event:event withProperties:OCMOCK_ANY];
 
             [ARAnalytics addEventAnalyticsHook: @{
                 ARAnalyticsClass: TestObject.class,
@@ -180,6 +220,8 @@ describe(@"events", ^{
             }];
 
             [[[TestObject alloc] init] methodToNotBeSkipped];
+
+            OCMVerify([analyticsMock event:event withProperties:OCMOCK_ANY]);
         });
 
     });
@@ -206,6 +248,24 @@ describe(@"tracking screens", ^{
             }]
         }];
         
+        [[[TestObject alloc] init] appearedMethod];
+
+        expect(provider.lastEventName).to.equal(@"Screen view");
+        expect(provider.lastEventProperties).to.equal(@{ @"screen": @"page"});
+    });
+
+    it(@"tracks page views with the page name supplied from a block", ^{
+        [ARAnalytics addScreenMonitoringAnalyticsHook: @{
+            ARAnalyticsClass: TestObject.class,
+            ARAnalyticsDetails: @[ @{
+                ARAnalyticsPageNameBlock: ^NSString *(UIViewController *controller, NSArray *parameters,
+                                                    NSDictionary *customProperties) {
+                            return @"page";
+                },
+                ARAnalyticsSelectorName: ARAnalyticsSelector(appearedMethod),
+            }]
+        }];
+
         [[[TestObject alloc] init] appearedMethod];
 
         expect(provider.lastEventName).to.equal(@"Screen view");

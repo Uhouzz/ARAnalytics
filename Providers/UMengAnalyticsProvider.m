@@ -5,17 +5,18 @@
 @implementation UMengAnalyticsProvider
 #ifdef AR_UMENGANALYTICS_EXISTS
 
-- (id) initWithIdentifier:(NSString *)identifier {
+- (instancetype) initWithIdentifier:(NSString *)identifier {
     NSAssert([MobClick class], @"MobClick is not included");
-    // [MobClick startWithAppkey:identifier];
-    
-    UMAnalyticsConfig *config = [[UMAnalyticsConfig alloc] init];
+    UMAnalyticsConfig *config = [UMAnalyticsConfig sharedInstance];
     config.appKey = identifier;
+
+    // 是否开启错误分析
+//	config.bCrashReportEnabled = NO;
 
     [MobClick startWithConfigure:config];
 
     [MobClick setAppVersion:XcodeAppVersion];
-    
+
     return [super init];
 }
 
@@ -43,7 +44,7 @@
 
 /// Submit an event with a time interval
 - (void) logTimingEvent:(NSString *)event withInterval:(NSNumber *)interval {
-    //durations位为毫秒
+    // durations位为毫秒
     [MobClick event:event durations:(int)([interval doubleValue] * 1000)];
 }
 

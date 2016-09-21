@@ -1,9 +1,54 @@
 # ARAnalytics
 
-## Version 3.8.3
+## Master
+
+## Version 4.0.0
+
+* Fixes issue where Adjust SDK assumes event value is a string
+* Enables unidentified users for Intercom (@MrAlek)
+* Increased deployment target for Localytics and Intercom to 8.0 (@BenchR267 & @garnett)
+* Updated logTimingEvent function to use given category for GoogleAnalytics. (@Goharhovhannisyan)
+* Makes Intercom reset old user data before registering user (@MrAlek)
+
+## Version 3.10.2
+
+* Added ARLogv function for Switft interop (@ibrt)
+* Changed import method for Localytics (@cemaleker)
+* changed return type of init methods to instancetype instead of id (@BenchR267)
+* Added support for Appboy (@BenchR267)
+
+## Version 3.10.1
+
+* tvOS support actually works if you don't use cocoapods-expert-difficulty [orta]
+
+## Version 3.10.0
+
+* Add Google Analytics event dispatching immediately after sending events while debugging (@superarts)
+* Added support for Firebase Analytics (@BenchR267)
+* Added support for Leanplum (@BenchR267)
+
+## Version 3.9.2
+* Fix issue in DSL where properties block was being invoked more than once (@arifken)
+
+## Version 3.9.1
+* Add support for dynamic page names and event names in the DSL (@arifken)
+* Add configuration setting to the Adobe provider for -trackAction:data: vs. -trackState:data: for screen views. When enabled, allows page views with custom properties to be tracked with -trackState:data: (@arifken)
+* Use proper error logging method for Fabric / Crashlytics (@wzs)
+* Improved Adobe Omniture (@arifken)
+* Mixpanel provider can register push notifications (@rad182)
+* Fixes to Localytics (@garnett)
+* Avoiding using the top level Google Pod due to not being Bitcode compatibole (@fotiDim)
+
+## Version 3.9.0
 
 * Adds MobileAppTracker/Tune support (@fabiojgrocha)
 * Add support for optional anonymous ID  (@alloy)
+* Set user property is now `id` instead of `NSString`  (@alloy)
+* Let HockeySDK work with CocoaPods-Frameworks (@orta)
+* Improved Umeng support  (@ttgb)
+* Added LaunchKit (@axidms)
+* Add support for Segment 3.0 (@sgtsquiggs)
+* Improve initialiser for AdjustProvider (@BenchR267)
 
 ## Version 3.8.2
 

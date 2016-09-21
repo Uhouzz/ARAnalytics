@@ -19,17 +19,27 @@
     // Use ARAnalytics providerInstanceOfClass:IntercomProvider
     // to turn this off if you're getting too many events
 
-    if (self.registerTrackedEvents) {
+    if (!self.registerTrackedEvents) {
+        return;
+    }
+
+    if (properties && properties.count > 0) {
         [Intercom logEventWithName:event metaData:properties];
+    } else {
+        [Intercom logEventWithName:event];
     }
 }
 
 - (void)identifyUserWithID:(NSString *)userID andEmailAddress:(NSString *)email
 {
+    [Intercom reset];
+    
     if (email) {
         [Intercom registerUserWithUserId:userID email:email];
-    } else {
+    } else if (userID) {
         [Intercom registerUserWithUserId:userID];
+    } else {
+        [Intercom registerUnidentifiedUser];
     }
 }
 
